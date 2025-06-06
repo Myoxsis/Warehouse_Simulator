@@ -1,0 +1,12 @@
+{
+  "name": "warehouse-simulator-electron",
+  "version": "0.1.0",
+  "main": "main.js",
+  "description": "Electron interface for warehouse simulation",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^27.0.0"
+  }
+}
