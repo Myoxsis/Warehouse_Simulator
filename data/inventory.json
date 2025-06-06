@@ -1,0 +1,6 @@
+{
+  "supplier1": {"item1": 100},
+  "supplier2": {"item1": 50, "item2": 75},
+  "warehouse1": {},
+  "retailer1": {}
+}
