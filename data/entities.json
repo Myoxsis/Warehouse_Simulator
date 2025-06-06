@@ -1,0 +1,6 @@
+[
+  {"id": "supplier1", "type": "supplier", "name": "Supplier A", "location": "City A"},
+  {"id": "supplier2", "type": "supplier", "name": "Supplier B", "location": "City B"},
+  {"id": "warehouse1", "type": "warehouse", "name": "Main Warehouse", "location": "City C"},
+  {"id": "retailer1", "type": "retailer", "name": "Retailer X", "location": "City D"}
+]
