@@ -32,7 +32,7 @@ app.on('window-all-closed', () => {
 
 // IPC handlers bridging to simulator modules
 import { nextStep, addEntity } from './simulator/simulation.js';
-import { getEntities } from './simulator/entities.js';
+import { getEntities, updateEntity, deleteEntity } from './simulator/entities.js';
 
 ipcMain.handle('sim:addEntity', (_event, entity) => {
   return addEntity(entity);
@@ -40,6 +40,14 @@ ipcMain.handle('sim:addEntity', (_event, entity) => {
 
 ipcMain.handle('sim:getEntities', () => {
   return getEntities();
+});
+
+ipcMain.handle('sim:updateEntity', (_event, id, partial) => {
+  return updateEntity(id, partial);
+});
+
+ipcMain.handle('sim:deleteEntity', (_event, id) => {
+  return deleteEntity(id);
 });
 
 ipcMain.handle('sim:nextStep', () => {

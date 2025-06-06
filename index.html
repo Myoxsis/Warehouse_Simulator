@@ -6,6 +6,21 @@
 </head>
 <body>
   <h1>Supply Chain Simulator</h1>
+  <div id="entityForm">
+    <input id="entityId" placeholder="ID" />
+    <input id="entityName" placeholder="Name" />
+    <input id="entityLocation" placeholder="Location" />
+    <select id="entityType">
+      <option value="supplier">Supplier</option>
+      <option value="manufacturer">Manufacturer</option>
+      <option value="warehouse">Warehouse</option>
+      <option value="distributor">Distributor</option>
+      <option value="retailer">Retailer</option>
+    </select>
+    <button id="createEntity">Add</button>
+    <button id="updateEntity">Update</button>
+    <button id="deleteEntity">Delete</button>
+  </div>
   <button id="addEntity">Add Sample Entity</button>
   <button id="nextStep">Next Step</button>
   <pre id="output"></pre>

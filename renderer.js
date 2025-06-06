@@ -5,6 +5,15 @@ const output = document.getElementById('output');
 const canvas = document.getElementById('entityCanvas');
 const ctx = canvas.getContext('2d');
 
+// Form elements for entity management
+const createBtn = document.getElementById('createEntity');
+const updateBtn = document.getElementById('updateEntity');
+const deleteBtn = document.getElementById('deleteEntity');
+const idInput = document.getElementById('entityId');
+const nameInput = document.getElementById('entityName');
+const locationInput = document.getElementById('entityLocation');
+const typeSelect = document.getElementById('entityType');
+
 function drawEntities(entities) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   entities.forEach((e, idx) => {
@@ -17,12 +26,16 @@ function drawEntities(entities) {
   });
 }
 
-addBtn.addEventListener('click', async () => {
-  const sample = { id: Date.now().toString(), type: 'warehouse', name: 'Temp Warehouse', location: 'Unknown' };
-  await window.api.addEntity(sample);
+async function refresh() {
   const entities = await window.api.getEntities();
   output.textContent = JSON.stringify(entities, null, 2);
   drawEntities(entities);
+}
+
+addBtn.addEventListener('click', async () => {
+  const sample = { id: Date.now().toString(), type: 'warehouse', name: 'Temp Warehouse', location: 'Unknown' };
+  await window.api.addEntity(sample);
+  refresh();
 });
 
 stepBtn.addEventListener('click', async () => {
@@ -30,4 +43,32 @@ stepBtn.addEventListener('click', async () => {
   output.textContent = JSON.stringify(state, null, 2);
   const entities = await window.api.getEntities();
   drawEntities(entities);
+});
+
+createBtn.addEventListener('click', async () => {
+  const entity = {
+    id: idInput.value || Date.now().toString(),
+    name: nameInput.value,
+    location: locationInput.value,
+    type: typeSelect.value,
+  };
+  await window.api.addEntity(entity);
+  refresh();
+});
+
+updateBtn.addEventListener('click', async () => {
+  if (!idInput.value) return;
+  const partial = {
+    name: nameInput.value,
+    location: locationInput.value,
+    type: typeSelect.value,
+  };
+  await window.api.updateEntity(idInput.value, partial);
+  refresh();
+});
+
+deleteBtn.addEventListener('click', async () => {
+  if (!idInput.value) return;
+  await window.api.deleteEntity(idInput.value);
+  refresh();
 });
