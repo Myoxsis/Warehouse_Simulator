@@ -2,7 +2,7 @@
   "name": "warehouse_simulator",
   "version": "1.0.0",
   "description": "A minimal demo of a warehouse inventory simulation built with Node.js and Python.",
-  "main": "main.js",
+  "main": "main.cjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
