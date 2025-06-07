@@ -18,11 +18,12 @@ export function getOrders() {
 
 export function createOrder(order) {
   const data = readData();
-  data.push(order);
+  const newOrder = { ...order, status: 'pending' };
+  data.push(newOrder);
   writeData(data);
   // deduct inventory from source when the order is placed
-  adjustInventory(order.from, order.item, -order.qty);
-  return order;
+  adjustInventory(newOrder.from, newOrder.item, -newOrder.qty);
+  return newOrder;
 }
 
 export function advanceOrders() {
@@ -30,8 +31,23 @@ export function advanceOrders() {
   const remaining = [];
   const fulfilled = [];
   for (const o of orders) {
-    o.delay -= 1;
+    // transition from pending to shipped on first step
+    if (o.status === 'pending') {
+      o.status = 'shipped';
+    } else if (o.status === 'delayed') {
+      // resume shipping after a delay
+      o.status = 'shipped';
+    }
+
+    // 20% chance order experiences a delay in this step
+    if (o.status === 'shipped' && Math.random() < 0.2) {
+      o.status = 'delayed';
+    } else {
+      o.delay -= 1;
+    }
+
     if (o.delay <= 0) {
+      o.status = 'received';
       fulfilled.push(o);
     } else {
       remaining.push(o);

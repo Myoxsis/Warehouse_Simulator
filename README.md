@@ -12,6 +12,16 @@ npm start     # launch the desktop app
 ```
 
 Use the buttons in the UI to add a sample entity, advance the simulation
-step, or view current inventory levels. Inventory is automatically reduced
-from the source when an order is placed and added to the destination once
-the order is fulfilled.
+step, or view current inventory levels. You can also create sample orders and
+view their status over time. Inventory is automatically reduced from the
+source when an order is placed and added to the destination once the order is
+fulfilled.
+
+## Order Statuses
+
+Orders move through four statuses during the simulation:
+
+- **pending**: order has been created and is waiting to ship
+- **shipped**: order is in transit
+- **delayed**: shipment is temporarily delayed
+- **received**: order has arrived and inventory is added to the destination
