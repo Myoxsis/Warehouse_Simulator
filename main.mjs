@@ -31,7 +31,7 @@ app.on('window-all-closed', () => {
 });
 
 // IPC handlers bridging to simulator modules
-import { nextStep, addEntity } from './simulator/simulation.js';
+import { nextStep, addEntity, createOrder, getOrders } from './simulator/simulation.js';
 import { getEntities } from './simulator/entities.js';
 import { getAllInventory } from './simulator/inventory.js';
 
@@ -49,4 +49,12 @@ ipcMain.handle('sim:nextStep', () => {
 
 ipcMain.handle('sim:getAllInventory', () => {
   return getAllInventory();
+});
+
+ipcMain.handle('sim:createOrder', (_event, order) => {
+  return createOrder(order);
+});
+
+ipcMain.handle('sim:getOrders', () => {
+  return getOrders();
 });

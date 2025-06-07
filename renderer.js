@@ -2,6 +2,8 @@
 const addBtn = document.getElementById('addEntity');
 const stepBtn = document.getElementById('nextStep');
 const inventoryBtn = document.getElementById('viewInventory');
+const addOrderBtn = document.getElementById('addOrder');
+const viewOrdersBtn = document.getElementById('viewOrders');
 const output = document.getElementById('output');
 const canvas = document.getElementById('entityCanvas');
 const ctx = canvas.getContext('2d');
@@ -37,4 +39,17 @@ stepBtn.addEventListener('click', async () => {
 inventoryBtn.addEventListener('click', async () => {
   const inventory = await window.api.getAllInventory();
   output.textContent = JSON.stringify(inventory, null, 2);
+});
+
+addOrderBtn.addEventListener('click', async () => {
+  // create a sample order from supplier1 to retailer1
+  const order = { from: 'supplier1', to: 'retailer1', item: 'item1', qty: 5, delay: 2 };
+  await window.api.createOrder(order);
+  const orders = await window.api.getOrders();
+  output.textContent = JSON.stringify(orders, null, 2);
+});
+
+viewOrdersBtn.addEventListener('click', async () => {
+  const orders = await window.api.getOrders();
+  output.textContent = JSON.stringify(orders, null, 2);
 });
