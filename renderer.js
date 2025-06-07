@@ -20,6 +20,14 @@ function drawEntities(entities) {
   });
 }
 
+async function init() {
+  const entities = await window.api.getEntities();
+  output.textContent = JSON.stringify(entities, null, 2);
+  drawEntities(entities);
+}
+
+window.addEventListener('DOMContentLoaded', init);
+
 addBtn.addEventListener('click', async () => {
   const sample = { id: Date.now().toString(), type: 'warehouse', name: 'Temp Warehouse', location: 'Unknown' };
   await window.api.addEntity(sample);
