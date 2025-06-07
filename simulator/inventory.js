@@ -11,6 +11,10 @@ function writeData(data) {
   fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 }
 
+export function getAllInventory() {
+  return readData();
+}
+
 export function getInventory(id) {
   const data = readData();
   return data[id] || {};

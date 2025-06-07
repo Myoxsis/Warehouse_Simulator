@@ -11,5 +11,7 @@ npm install   # install Electron
 npm start     # launch the desktop app
 ```
 
-Use the buttons in the UI to add a sample entity or advance the simulation
-step. The current state will be printed on screen for debugging.
+Use the buttons in the UI to add a sample entity, advance the simulation
+step, or view current inventory levels. Inventory is automatically reduced
+from the source when an order is placed and added to the destination once
+the order is fulfilled.
