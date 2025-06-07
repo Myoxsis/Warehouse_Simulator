@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld('api', {
   addEntity: (entity) => ipcRenderer.invoke('sim:addEntity', entity),
   getEntities: () => ipcRenderer.invoke('sim:getEntities'),
   nextStep: () => ipcRenderer.invoke('sim:nextStep'),
+  getAllInventory: () => ipcRenderer.invoke('sim:getAllInventory'),
 });

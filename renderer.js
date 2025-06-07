@@ -1,6 +1,7 @@
 // Handle UI events and interact with backend via preload API
 const addBtn = document.getElementById('addEntity');
 const stepBtn = document.getElementById('nextStep');
+const inventoryBtn = document.getElementById('viewInventory');
 const output = document.getElementById('output');
 const canvas = document.getElementById('entityCanvas');
 const ctx = canvas.getContext('2d');
@@ -27,7 +28,13 @@ addBtn.addEventListener('click', async () => {
 
 stepBtn.addEventListener('click', async () => {
   const state = await window.api.nextStep();
-  output.textContent = JSON.stringify(state, null, 2);
+  const inventory = await window.api.getAllInventory();
+  output.textContent = JSON.stringify({ state, inventory }, null, 2);
   const entities = await window.api.getEntities();
   drawEntities(entities);
+});
+
+inventoryBtn.addEventListener('click', async () => {
+  const inventory = await window.api.getAllInventory();
+  output.textContent = JSON.stringify(inventory, null, 2);
 });

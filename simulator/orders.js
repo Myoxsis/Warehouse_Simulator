@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { adjustInventory } from './inventory.js';
 const dataPath = path.join(process.cwd(), 'data', 'orders.json');
 
 function readData() {
@@ -19,6 +20,8 @@ export function createOrder(order) {
   const data = readData();
   data.push(order);
   writeData(data);
+  // deduct inventory from source when the order is placed
+  adjustInventory(order.from, order.item, -order.qty);
   return order;
 }
 
