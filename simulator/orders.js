@@ -1,33 +1,32 @@
 import fs from 'fs';
 import path from 'path';
 import { adjustInventory } from './inventory.js';
+
 const dataPath = path.join(process.cwd(), 'data', 'orders.json');
 
-function readData() {
-  if (!fs.existsSync(dataPath)) return [];
-  return JSON.parse(fs.readFileSync(dataPath));
+let orders = [];
+
+function loadInitial() {
+  if (fs.existsSync(dataPath)) {
+    orders = JSON.parse(fs.readFileSync(dataPath));
+  }
 }
 
-function writeData(data) {
-  fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
-}
+loadInitial();
 
 export function getOrders() {
-  return readData();
+  return orders;
 }
 
 export function createOrder(order) {
-  const data = readData();
   const newOrder = { ...order, status: 'pending' };
-  data.push(newOrder);
-  writeData(data);
+  orders.push(newOrder);
   // deduct inventory from source when the order is placed
   adjustInventory(newOrder.from, newOrder.item, -newOrder.qty);
   return newOrder;
 }
 
 export function advanceOrders() {
-  const orders = readData();
   const remaining = [];
   const fulfilled = [];
   for (const o of orders) {
@@ -53,6 +52,10 @@ export function advanceOrders() {
       remaining.push(o);
     }
   }
-  writeData(remaining);
+  orders = remaining;
   return { remaining, fulfilled };
+}
+
+export function setOrders(data) {
+  orders = Array.isArray(data) ? data : [];
 }
