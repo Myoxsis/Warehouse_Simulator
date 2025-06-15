@@ -1,15 +1,17 @@
 # Warehouse Simulator
 
-This project contains a small Electron application that demonstrates a basic
+This project contains a small web application that demonstrates a basic
 supply chain simulator. The backend logic is organized under the `simulator/`
 folder and data is stored as JSON in `data/`.
 
 ## Running the App
 
 ```bash
-npm install   # install Electron
-npm start     # launch the desktop app
+npm install   # install dependencies
+npm start     # start the web server
 ```
+
+Open your browser to `http://localhost:3000` to interact with the simulator.
 
 Use the buttons in the UI to add a sample entity, advance the simulation
 step, or view current inventory levels. You can also create sample orders and

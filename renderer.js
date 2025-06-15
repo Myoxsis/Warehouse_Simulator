@@ -1,4 +1,21 @@
-// Handle UI events and interact with backend via preload API
+// Handle UI events and interact with backend via HTTP API
+
+async function api(method, url, data) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (data) opts.body = JSON.stringify(data);
+  const res = await fetch(url, opts);
+  return res.json();
+}
+
+const apiClient = {
+  addEntity: (entity) => api('POST', '/api/entities', entity),
+  getEntities: () => api('GET', '/api/entities'),
+  nextStep: () => api('POST', '/api/next-step'),
+  getAllInventory: () => api('GET', '/api/inventory'),
+  createOrder: (order) => api('POST', '/api/order', order),
+  getOrders: () => api('GET', '/api/orders'),
+};
+
 const addBtn = document.getElementById('addEntity');
 const stepBtn = document.getElementById('nextStep');
 const inventoryBtn = document.getElementById('viewInventory');
@@ -21,7 +38,7 @@ function drawEntities(entities) {
 }
 
 async function init() {
-  const entities = await window.api.getEntities();
+  const entities = await apiClient.getEntities();
   output.textContent = JSON.stringify(entities, null, 2);
   drawEntities(entities);
 }
@@ -30,34 +47,34 @@ window.addEventListener('DOMContentLoaded', init);
 
 addBtn.addEventListener('click', async () => {
   const sample = { id: Date.now().toString(), type: 'warehouse', name: 'Temp Warehouse', location: 'Unknown' };
-  await window.api.addEntity(sample);
-  const entities = await window.api.getEntities();
+  await apiClient.addEntity(sample);
+  const entities = await apiClient.getEntities();
   output.textContent = JSON.stringify(entities, null, 2);
   drawEntities(entities);
 });
 
 stepBtn.addEventListener('click', async () => {
-  const state = await window.api.nextStep();
-  const inventory = await window.api.getAllInventory();
+  const state = await apiClient.nextStep();
+  const inventory = await apiClient.getAllInventory();
   output.textContent = JSON.stringify({ state, inventory }, null, 2);
-  const entities = await window.api.getEntities();
+  const entities = await apiClient.getEntities();
   drawEntities(entities);
 });
 
 inventoryBtn.addEventListener('click', async () => {
-  const inventory = await window.api.getAllInventory();
+  const inventory = await apiClient.getAllInventory();
   output.textContent = JSON.stringify(inventory, null, 2);
 });
 
 addOrderBtn.addEventListener('click', async () => {
   // create a sample order from supplier1 to retailer1
   const order = { from: 'supplier1', to: 'retailer1', item: 'item1', qty: 5, delay: 2 };
-  await window.api.createOrder(order);
-  const orders = await window.api.getOrders();
+  await apiClient.createOrder(order);
+  const orders = await apiClient.getOrders();
   output.textContent = JSON.stringify(orders, null, 2);
 });
 
 viewOrdersBtn.addEventListener('click', async () => {
-  const orders = await window.api.getOrders();
+  const orders = await apiClient.getOrders();
   output.textContent = JSON.stringify(orders, null, 2);
 });
