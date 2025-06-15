@@ -1,4 +1,4 @@
-import { advanceOrders, createOrder, getOrders } from './orders.js';
+import { advanceOrders, createOrder, getOrders, setOrders } from './orders.js';
 import { calculateDelay } from './transport.js';
 import { adjustInventory } from './inventory.js';
 import { addEntity as addEntityToStore } from './entities.js';
@@ -24,4 +24,4 @@ export function addEntity(entity) {
   return addEntityToStore(entity);
 }
 
-export { createOrder, getOrders } from './orders.js';
+export { createOrder, getOrders, setOrders } from './orders.js';

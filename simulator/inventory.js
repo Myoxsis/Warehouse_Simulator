@@ -1,34 +1,35 @@
 import fs from 'fs';
 import path from 'path';
+
 const dataPath = path.join(process.cwd(), 'data', 'inventory.json');
 
-function readData() {
-  if (!fs.existsSync(dataPath)) return {};
-  return JSON.parse(fs.readFileSync(dataPath));
+let inventory = {};
+
+function loadInitial() {
+  if (fs.existsSync(dataPath)) {
+    inventory = JSON.parse(fs.readFileSync(dataPath));
+  }
 }
 
-function writeData(data) {
-  fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
-}
+loadInitial();
 
 export function getAllInventory() {
-  return readData();
+  return inventory;
 }
 
 export function getInventory(id) {
-  const data = readData();
-  return data[id] || {};
+  return inventory[id] || {};
 }
 
 export function setInventory(id, items) {
-  const data = readData();
-  data[id] = items;
-  writeData(data);
+  inventory[id] = items;
 }
 
 export function adjustInventory(id, item, qty) {
-  const data = readData();
-  if (!data[id]) data[id] = {};
-  data[id][item] = (data[id][item] || 0) + qty;
-  writeData(data);
+  if (!inventory[id]) inventory[id] = {};
+  inventory[id][item] = (inventory[id][item] || 0) + qty;
+}
+
+export function setAllInventory(data) {
+  inventory = data || {};
 }

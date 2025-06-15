@@ -14,6 +14,8 @@ const apiClient = {
   getAllInventory: () => api('GET', '/api/inventory'),
   createOrder: (order) => api('POST', '/api/order', order),
   getOrders: () => api('GET', '/api/orders'),
+  exportData: () => api('GET', '/api/export'),
+  importData: (data) => api('POST', '/api/import', data),
 };
 
 function drawEntities(ctx, canvas, entities) {
@@ -31,6 +33,7 @@ function drawEntities(ctx, canvas, entities) {
 
 function App() {
   const [output, setOutput] = React.useState('');
+  const [importText, setImportText] = React.useState('');
   const canvasRef = React.useRef(null);
 
   const updateEntities = async () => {
@@ -75,16 +78,57 @@ function App() {
     setOutput(JSON.stringify(orders, null, 2));
   };
 
+  const handleExport = async () => {
+    const data = await apiClient.exportData();
+    setOutput(JSON.stringify(data, null, 2));
+  };
+
+  const handleImport = async () => {
+    try {
+      const data = JSON.parse(importText);
+      await apiClient.importData(data);
+      setOutput('Import successful');
+      updateEntities();
+    } catch (e) {
+      setOutput('Invalid JSON');
+    }
+  };
+
   return (
     <div>
       <h1>Supply Chain Simulator</h1>
+
+      <h2>Entity Management</h2>
       <button onClick={handleAddEntity}>Add Sample Entity</button>
+      <button onClick={updateEntities}>Refresh Entities</button>
+
+      <h2>Simulator Controls</h2>
       <button onClick={handleNextStep}>Next Step</button>
       <button onClick={handleViewInventory}>View Inventory</button>
       <button onClick={handleAddOrder}>Add Sample Order</button>
       <button onClick={handleViewOrders}>View Orders</button>
+
+      <h2>Settings</h2>
+      <button onClick={handleExport}>Export Data</button>
+      <div>
+        <textarea
+          rows="4"
+          cols="50"
+          value={importText}
+          onChange={(e) => setImportText(e.target.value)}
+          placeholder="Paste JSON here"
+        />
+      </div>
+      <button onClick={handleImport}>Import Data</button>
+
       <pre>{output}</pre>
-      <canvas ref={canvasRef} id="entityCanvas" width="600" height="400" style={{border: '1px solid #ccc'}}></canvas>
+      <canvas
+        ref={canvasRef}
+        id="entityCanvas"
+        width="600"
+        height="400"
+        style={{ border: '1px solid #ccc' }}
+      ></canvas>
     </div>
   );
 }

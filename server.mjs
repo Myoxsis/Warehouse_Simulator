@@ -1,9 +1,9 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { addEntity, getEntities } from './simulator/entities.js';
-import { nextStep, createOrder, getOrders } from './simulator/simulation.js';
-import { getAllInventory } from './simulator/inventory.js';
+import { addEntity, getEntities, setEntities } from './simulator/entities.js';
+import { nextStep, createOrder, getOrders, setOrders } from './simulator/simulation.js';
+import { getAllInventory, setAllInventory } from './simulator/inventory.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,6 +38,22 @@ app.post('/api/order', (req, res) => {
 
 app.get('/api/orders', (_req, res) => {
   res.json(getOrders());
+});
+
+app.get('/api/export', (_req, res) => {
+  res.json({
+    entities: getEntities(),
+    inventory: getAllInventory(),
+    orders: getOrders(),
+  });
+});
+
+app.post('/api/import', (req, res) => {
+  const { entities, inventory, orders } = req.body || {};
+  if (entities) setEntities(entities);
+  if (inventory) setAllInventory(inventory);
+  if (orders) setOrders(orders);
+  res.json({ status: 'ok' });
 });
 
 app.listen(PORT, () => {
